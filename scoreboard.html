@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Scoreboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0a1628;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      text-align: center;
+      padding: 12px 0 20px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: #22c55e;
+      letter-spacing: 0.5px;
+    }
+    .header p {
+      margin: 4px 0 0;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .scoreboard {
+      background: #132a4a;
+      border-radius: 16px;
+      padding: 20px 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+    }
+
+    .teams {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .team {
+      flex: 1;
+      text-align: center;
+    }
+    .team-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .score {
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .home .score { color: #60a5fa; }
+    .visitor .score { color: #f472b6; }
+
+    .game-info {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      padding: 12px 0;
+      border-top: 1px solid #1e3a5f;
+      border-bottom: 1px solid #1e3a5f;
+      margin: 8px 0 16px;
+    }
+    .info-item {
+      text-align: center;
+    }
+    .info-label {
+      font-size: 11px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .info-value {
+      font-size: 26px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .count {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 8px;
+    }
+    .count-item {
+      text-align: center;
+      min-width: 68px;
+    }
+    .count-label {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .count-value {
+      font-size: 44px;
+      font-weight: 800;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      color: #fbbf24;
+    }
+
+    .widget-container {
+      margin-top: 12px;
+      background: #0f223f;
+      border-radius: 12px;
+      padding: 8px;
+      min-height: 140px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #475569;
+      padding: 12px 0;
+    }
+    .footer a {
+      color: #64748b;
+    }
+
+    @media (max-width: 480px) {
+      .score { font-size: 52px; }
+      .count-value { font-size: 36px; }
+      .info-value { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>⚾ LIVE SCORES</h1>
+      <p>Powered by GameChanger • Updates automatically</p>
+    </div>
+
+    <div class="scoreboard">
+      <!-- Visual summary (optional - the embedded widget below is the real source) -->
+      <div class="teams">
+        <div class="team home">
+          <div class="team-name">HOME</div>
+          <div class="score" id="home-score">--</div>
+        </div>
+        <div class="team visitor">
+          <div class="team-name">VISITOR</div>
+          <div class="score" id="visitor-score">--</div>
+        </div>
+      </div>
+
+      <div class="game-info">
+        <div class="info-item">
+          <div class="info-label">Inning</div>
+          <div class="info-value" id="inning">--</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Half</div>
+          <div class="info-value" id="half">---</div>
+        </div>
+      </div>
+
+      <div class="count">
+        <div class="count-item">
+          <div class="count-label">Balls</div>
+          <div class="count-value" id="balls">--</div>
+        </div>
+        <div class="count-item">
+          <div class="count-label">Strikes</div>
+          <div class="count-value" id="strikes">--</div>
+        </div>
+        <div class="count-item">
+          <div class="count-label">Outs</div>
+          <div class="count-value" id="outs">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 
+      =====================================================
+      IMPORTANT: Replace everything inside this div with the 
+      exact embed code from GameChanger (web.gc.com)
+      =====================================================
+    -->
+    <div class="widget-container" id="gc-widget">
+      <div style="padding: 24px 12px; text-align: center; color: #64748b; font-size: 14px; line-height: 1.4;">
+        <strong>GameChanger Scoreboard goes here</strong><br><br>
+        <span style="font-size: 13px;">
+          1. Go to <a href="https://web.gc.com" target="_blank" style="color:#60a5fa">web.gc.com</a> and log in<br>
+          2. Open your team → Tools tab → Create Scoreboard Widget<br>
+          3. Copy the code and paste it here (replacing this message)
+        </span>
+      </div>
+    </div>
+
+    <div class="footer">
+      Scores update live from GameChanger • 
+      <a href="#" onclick="location.reload(); return false;">Refresh page</a>
+    </div>
+  </div>
+
+  <script>
+    // Demo / placeholder values so the page looks good immediately.
+    // These are overwritten once you paste the real GameChanger widget.
+    function setDemoScores() {
+      const el = id => document.getElementById(id);
+      if (el('home-score')) el('home-score').textContent = '7';
+      if (el('visitor-score')) el('visitor-score').textContent = '4';
+      if (el('inning')) el('inning').textContent = '5';
+      if (el('half')) el('half').textContent = 'Bot';
+      if (el('balls')) el('balls').textContent = '2';
+      if (el('strikes')) el('strikes').textContent = '1';
+      if (el('outs')) el('outs').textContent = '2';
+    }
+    setDemoScores();
+
+    // Tap anywhere on the page (except links) to refresh — handy on phones
+    document.body.addEventListener('click', function(e) {
+      if (e.target.tagName !== 'A') {
+        // Uncomment the next line if you want tap-to-refresh behavior
+        // location.reload();
+      }
+    });
+  </script>
+</body>
+</html>
